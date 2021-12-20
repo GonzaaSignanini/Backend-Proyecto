@@ -42,10 +42,10 @@ routerProductos.post('', async (req, res) => {
 /* METODO PUT */
 
 routerProductos.put('/:id', (req, res) => {
-    const { id } = req.params;
-    const body = req.body;
-    const product = allProducts.update(id, body);
-    res.json(product);
+    const id = parseFloat(req.params.id);
+    const object = req.body;
+    allProducts.update(id, object);
+    res.send(`Producto con id: #${id} ha sido actualizado.`)
 });
 
 /* METODO DELETE */

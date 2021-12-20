@@ -18,15 +18,15 @@
     "id": 3
   },
   {
-    "title": "Mesa",
-    "price": 750,
-    "thumbnail": "",
+    "title": "Lavarropas",
+    "price": "3500",
+    "thumbnail": "www.garbarino.com.ar",
     "id": 4
   },
   {
-    "title": "Silla",
-    "price": 518,
-    "thumbnail": "",
+    "title": "Mesa de Pool",
+    "price": "13000",
+    "thumbnail": "www.tisus.com.ar",
     "id": 5
   },
   {
@@ -36,9 +36,9 @@
     "id": 6
   },
   {
-    "title": "Monitor",
-    "price": "231331",
-    "thumbnail": "",
+    "title": "Teclado Mecanico",
+    "price": "3200",
+    "thumbnail": "example",
     "id": 7
   }
 ]

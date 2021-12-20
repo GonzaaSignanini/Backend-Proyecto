@@ -5,12 +5,19 @@ class Contenedor {
         this.file = file;
     }
 
-    async update(id) {
-        const productos = await fs.promises.readFile(this.file, 'utf-8');
-        const arrProds = await JSON.parse(productos);
-        const objIndex = arrProds.getById();
-        console.log(objIndex);
-        return arrProds[objIndex];
+    update(id, object) {
+        this.getAll().then(async obj => {
+            let datos = obj;
+            const index = datos.findIndex(obj => obj.id == id);
+            datos[index].title = object.title || "";
+            datos[index].price = object.price || "";
+            datos[index].thumbnail = object.thumbnail || "";
+
+            await fs.promises.writeFile(this.file, JSON.stringify(datos, null, 2));
+        })
+        .catch(error => {
+            console.log("No se pudo actualizar el objeto.", error);
+        })
     }
 
     async save (producto) {
@@ -42,11 +49,9 @@ class Contenedor {
                 const arrProds = JSON.parse(productos);
                 const existe = arrProds.filter(item => item.id === id);
                 if (existe.length) {
-                    console.log('El producto con el id numero:', id, "es", existe);
                     return existe;
                 } else {
-                    console.log("no existe un producto con ese id");
-                    return "no existe un producto con ese id";
+                    return;
                 }
             }
         }
@@ -58,11 +63,9 @@ class Contenedor {
         try {
             const pedirDatos = fs.readFileSync(this.file, 'utf-8');
             if (pedirDatos === '') {
-                console.log("NO HAY PRODUCTOS EN LA BASE DE DATOS");
                 return "NO HAY PRODUCTOS EN LA BASE DE DATOS"
             } else {
                 const datos = JSON.parse(pedirDatos);
-                console.log("TODOS LOS PRODUCTOS GUARDADOS EN LA BASE DE DATOS SON: ", datos);
                 return "TODOS LOS PRODUCTOS GUARDADOS EN LA BASE DE DATOS SON: ", datos;
             }
         }
@@ -102,6 +105,8 @@ class Contenedor {
 }
 
 // const contenedorPrueba = new Contenedor('./productos.txt');
+// contenedorPrueba.update(2);
+
 // contenedorPrueba.save({title:"Zapatillas",price:5500,thumbnail:""});
 // contenedorPrueba.getAll();
 // contenedorPrueba.getById(3);
