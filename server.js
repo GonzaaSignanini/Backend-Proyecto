@@ -1,6 +1,6 @@
 import express from 'express';
 import randomObj from './Services/functions.js';
-import Contenedor from '../../vscode/Backend - CoderHouse/Clase 4/Desafio/contenedor.js';
+import Contenedor from './Services/contenedor.js';
 const { Router } = express;
 const app = express();
 const routerProductos = Router();
@@ -42,10 +42,9 @@ routerProductos.post('', async (req, res) => {
 /* METODO PUT */
 
 routerProductos.put('/:id', (req, res) => {
-    const  id  = req.params.id;
+    const { id } = req.params;
     const body = req.body;
-    const product = allProducts.update(id, body)
-    console.log(product);
+    const product = allProducts.update(id, body);
     res.json(product);
 });
 
