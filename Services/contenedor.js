@@ -20,26 +20,34 @@ class Contenedor {
         })
     }
 
-    async save (producto) {
-        try {
-            const data = await fs.promises.readFile(this.file, 'utf-8');
-            let datos = [];
-            if (data === ''){
-                producto.id = 1;
-                datos.push(producto);
-            } else {
-                datos = JSON.parse(data);
-                producto.id = datos[datos.length -1].id + 1;
-                datos.push(producto);
+    async save(producto) {
+        let id = this.maxId();
+        id += 1;
+        let obj = { ...producto, id: id}
+        try{
+            let fileProductos = await fs.promises.readFile(this.file , 'utf-8');
+            let productos = JSON.parse(fileProductos);
+            if(productos.some(prod => prod.title === obj.title)){
+                return {status:"error",message: "El producto ya existe"};
+            }else{
+                productos.push(obj);
+                try{
+                    await fs.promises.writeFile(this.file , JSON.stringify(productos, null, 2));
+                    return {status:"success",message: `Producto registrado. ID: ${obj.id}`}
+                }catch{
+                    return {status:"error",message:"No se pudo agregar el producto"}
+                }
             }
-            await fs.promises.writeFile(this.file, JSON.stringify(datos, null, 2));
-            console.log("El producto con el id:" ,producto.id, "ha sido guardado en la base de datos");
-            return producto;
+        }catch{
+            try{
+                await fs.promises.writeFile(this.file , JSON.stringify([obj], null, 2));
+                return {status: "success",message: `Producto registrado. ID: ${obj.id}`}
+            }catch{
+                return {status: "error",message: "No se pudo agregar el producto"}
+            }
         }
-        catch (err){
-            console.log(err);
-        }
-    }
+    }    
+
     async getById (id){
         try {
             const productos = fs.readFileSync(this.file, 'utf-8');
@@ -59,18 +67,14 @@ class Contenedor {
             console.log(err);
         }
     }
-    async getAll () {
-        try {
-            const pedirDatos = fs.readFileSync(this.file, 'utf-8');
-            if (pedirDatos === '') {
-                return "NO HAY PRODUCTOS EN LA BASE DE DATOS"
-            } else {
-                const datos = JSON.parse(pedirDatos);
-                return "TODOS LOS PRODUCTOS GUARDADOS EN LA BASE DE DATOS SON: ", datos;
-            }
-        }
-        catch (err){
-            console.log(err);
+    async getAll() {
+        try{
+            let archivo = await fs.promises.readFile(this.file , 'utf-8');
+            let productos = JSON.parse(archivo);
+            return {status: "success", message: productos};
+        }catch{
+            //El archivo no existe
+            return {status: "error", message: "El archivo no existe"}
         }
     }
     async deleteById (id) {
@@ -101,6 +105,31 @@ class Contenedor {
             console.log(err);
         }
         
+    }
+
+    maxId() {
+        let id = 0
+        try{
+            let fileProductos = fs.readFileSync(this.file);
+            let productos = JSON.parse(fileProductos);
+            
+            let res = productos.reduce((prev, currentValue, i) =>{
+                if(i==0){
+                    return {
+                        id: currentValue.id  
+                    }
+                }else{
+                    let MaxId = prev.id > currentValue.id ? prev.id : currentValue.id;
+                    return {
+                        id: MaxId
+                    }
+                }          
+            });
+            id = res.id
+        }catch{
+            return id;
+        }
+        return id;
     }
 }
 

@@ -41,9 +41,14 @@ routerProductos.post('', async (req, res) => {
 
 /* METODO PUT */
 
-routerProductos.put('/:id', (req, res) => {
+routerProductos.put('/:id', async (req, res) => {
     const id = parseFloat(req.params.id);
     const object = req.body;
+    const productos = await allProducts.getAll()
+    if (!productos.find(item => item.id == id)) {
+        res.send( {error: "Producto no encontrado"} );
+        return
+    }
     allProducts.update(id, object);
     res.send(`Producto con id: #${id} ha sido actualizado.`)
 });
