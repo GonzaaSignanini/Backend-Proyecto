@@ -1,0 +1,40 @@
+.container{
+    background-color:ghostwhite;
+    margin-top: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+}
+.formulario{
+    width: 50%;
+}
+.btn{
+    width: 100%;
+}
+.medicine{
+    width: 50px;
+    height: auto;
+    border-radius: 3px;
+}
+h3{
+    text-align: center;
+}
+
+.cont-msj {
+    margin-top: 1%;
+    margin-bottom: 3%;
+    height: 60px;
+}
+
+#chat-input {
+    height: 38px;
+    margin-left: 7px;
+}
+
+#email-input {
+    height: 38px;
+}
+
+.btn-send {
+    margin-left: 10px;
+}

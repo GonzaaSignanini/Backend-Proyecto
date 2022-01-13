@@ -1,81 +1,92 @@
-import express from 'express';
-import randomObj from './Services/functions.js';
-import Contenedor from './Services/contenedor.js';
-const { Router } = express;
+const express = require("express");
+const path = require("path");
 const app = express();
-const routerProductos = Router();
-app.use('/api/productos', routerProductos);
-app.use(express.static('public'));
-routerProductos.use(express.json());
-routerProductos.use(express.urlencoded({extended: true}));
-app.use(express.urlencoded({ extended: true }))
-const allProducts = new Contenedor('./productos.txt');
+const http = require("http");
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+const router = require("./routes/productos.js");
+const fetch = require("cross-fetch");
+const fs = require("fs");
 
-/* METODOS GET */
+const mensajes  = [];
+const articulos = [];
 
-routerProductos.get('', (req, res) => {
-    allProducts.getAll().then((data) => {
-        res.send(`PRODUCTOS DISPONIBLES:  ${JSON.stringify(data)}`)
-    }).catch((err) =>{throw err});
+const respProductos = async () => {
+
+  const listar = async () => {
+      const response = await fetch("http://localhost:8080/txt/productos.txt", {method: "GET"});
+      const res = await response.json()
+      res.forEach(element => {
+        articulos.push(element)
+      });
+      return res
+  }
+
+  let response = await listar().then((res) => {return res})
+  return response
+  
+}
+respProductos()
+
+const respMensajes = async () => {
+
+  const listar = async () => {
+      const response = await fetch("http://localhost:8080/txt/mensajes.txt", {method: "GET"});
+      const res = await response.json()
+      res.forEach(element => {
+        mensajes.push(element)
+      });
+      return res
+  }
+
+  let response = await listar().then((res) => {return res})
+  return response
+  
+}
+respMensajes()
+
+app.set("view engine", "ejs");
+app.set("views", "./views");
+
+//Router API
+app.use("/", router);
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "views")));
+
+io.on("connection", (socket) => {
+
+  console.log(`Conexión establecida - usuario: ${socket.id}`);
+  socket.on("disconnect", () => {
+    console.log(`Usuario ${socket.id} desconectado`);
+  });
+
+  //--> envio al cliente
+  socket.emit("mensajes", mensajes);
+  socket.emit("productos", articulos);
+  //<--
+
+  //--> recibo del cliente
+  socket.on("producto", async (data) => {
+    articulos.push(data);
+    await fs.promises.writeFile('./public/txt/productos.txt', JSON.stringify(articulos))
+    io.sockets.emit("productos", articulos);
+  });
+  socket.on("mensaje", async (data) => {
+    mensajes.push({ email: data.email, fyh: data.fyh, mensaje: data.msj });
+    await fs.promises.writeFile('./public/txt/mensajes.txt', JSON.stringify(mensajes))
+    io.sockets.emit("mensajes", mensajes);
+  });
+  //<--
+
 });
 
-routerProductos.get('/:id', async (req, res) => {
-    let numero = parseFloat(req.params.id);
-    const productos = await allProducts.getAll()
-    
-    if (numero > productos.length) {
-        res.send( { error : 'producto no encontrado' } );
-    }else {
-        allProducts.getById(numero).then((date) => {
-            res.send(`PRODUCTO SELECCIONADO:  ${JSON.stringify(date)}`);
-        }).catch((err) =>{throw err});
-    }
+
+//Server
+const PORT = 8080;
+server.listen(PORT, () => {
+  console.log(`Servidor escuchando en el puerto ${server.address().port}`);
 });
-
-/*  METODO POST */
- 
-routerProductos.post('', async (req, res) => {
-    await allProducts.save(req.body);
-    res.send(`PRODUCTO AÑADIDO: ${JSON.stringify(req.body)}`);
-});
-
-/* METODO PUT */
-
-routerProductos.put('/:id', async (req, res) => {
-    const id = parseFloat(req.params.id);
-    const object = req.body;
-    const productos = await allProducts.getAll()
-    if (!productos.find(item => item.id == id)) {
-        res.send( {error: "Producto no encontrado"} );
-        return
-    }
-    allProducts.update(id, object);
-    res.send(`Producto con id: #${id} ha sido actualizado.`)
-});
-
-/* METODO DELETE */
-
-routerProductos.delete('/:id', (req, res) => {
-    let numero = parseFloat(req.params.id);
-    allProducts.deleteById(numero).then((date) => {
-        res.send(`PRODUCTO ELIMINADO: ${JSON.stringify(date)}`);
-    }).catch((err) =>{throw err});
-});
-
-
-
-
-
-
-
-
-
-// app.get('/productoRandom', (req, res) => {
-//     allProducts.getById(randomObj()).then((datos) => {
-//         res.send(`Productos random: ${JSON.stringify(datos)}`)
-//     }).catch((err) =>{throw err});
-// })
-const server = app.listen(8080, () => {
-    console.log(`Servidor http escuchando en el puerto ${server.address().port}`);
-})
-server.on("error", error => console.log(`Error en servidor ${error}`));
+server.on("error", (error) => console.log(`Error en servidor ${error}`));

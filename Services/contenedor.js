@@ -1,4 +1,5 @@
-import fs from 'fs';
+const fs = require('fs');
+let db = [];
         
 class Contenedor {
     constructor (file) {
@@ -67,16 +68,29 @@ class Contenedor {
             console.log(err);
         }
     }
-    async getAll() {
-        try{
-            let archivo = await fs.promises.readFile(this.file , 'utf-8');
-            let productos = JSON.parse(archivo);
-            return {status: "success", message: productos};
-        }catch{
-            //El archivo no existe
-            return {status: "error", message: "El archivo no existe"}
+    getAll(){
+
+        const recuperarObjetos = async () => {
+            try {
+                const res = await fs.promises.readFile(this.file, 'UTF-8')
+                if (res.length == 0 || res == '[]') {
+                    return {error: 'El contenedor esta vacio'}
+                } else {
+                    const db = JSON.parse(res)
+                    //console.log(db);
+                    return db
+                }
+            }
+            catch (err){
+                console.log(err);
+            }
         }
+
+        let response = recuperarObjetos().then((res) => {return res})
+        return response
+
     }
+    
     async deleteById (id) {
         try {
             const productos = await fs.promises.readFile(this.file, 'utf-8');
@@ -133,8 +147,8 @@ class Contenedor {
     }
 }
 
-// const contenedorPrueba = new Contenedor('./productos.txt');
-// contenedorPrueba.update(2);
+// const contenedorPrueba = new Contenedor('../public/txt/productos.txt');
+// contenedorPrueba.save({title:"dsds", price:3444, thumbnail:""});
 
 // contenedorPrueba.save({title:"Zapatillas",price:5500,thumbnail:""});
 // contenedorPrueba.getAll();
@@ -142,4 +156,4 @@ class Contenedor {
 // contenedorPrueba.deleteById(1);
 // contenedorPrueba.deleteAll();
 
-export default Contenedor
+module.exports = Contenedor;
