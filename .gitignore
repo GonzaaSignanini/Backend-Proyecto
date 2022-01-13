@@ -4,5 +4,4 @@ servidor.js
 /desafio-pug
 /desafio-ejs
 /desafio-handlebars
-.gitignore
-README.md
+/readme.md
