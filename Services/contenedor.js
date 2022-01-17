@@ -1,5 +1,6 @@
 const fs = require('fs');
-let db = [];
+const Productos = require('./productos.js');
+const Utils = require('../lib/utils.js');
         
 class Contenedor {
     constructor (file) {
@@ -24,29 +25,34 @@ class Contenedor {
     async save(producto) {
         let id = this.maxId();
         id += 1;
-        let obj = { ...producto, id: id}
         try{
-            let fileProductos = await fs.promises.readFile(this.file , 'utf-8');
-            let productos = JSON.parse(fileProductos);
-            if(productos.some(prod => prod.title === obj.title)){
-                return {status:"error",message: "El producto ya existe"};
-            }else{
-                productos.push(obj);
+            let productoNuevo = new Productos(id, producto.nombre, Utils.dateNow, producto.descripcion, producto.codigo, producto.url,  producto.precio, producto.stock);
+            try{
+                let fileProductos = await fs.promises.readFile(this.file, 'utf-8');
+                let productos = JSON.parse(fileProductos);
+                if(productos.some(prod => prod.nombre === productoNuevo.nombre)){
+                    return {status:"error",message: "El producto ya existe"};
+                }else{
+                    productos.push(productoNuevo);
+                    try{
+                        await fs.promises.writeFile(this.file, JSON.stringify(productos, null, 2));
+                        return {status:"success",message: `Producto registrado. ID: ${productoNuevo.id}`}
+                    }catch{
+                        return {status:"error",message:"No se pudo agregar el producto"}
+                    }
+                }
+            }catch{
                 try{
-                    await fs.promises.writeFile(this.file , JSON.stringify(productos, null, 2));
-                    return {status:"success",message: `Producto registrado. ID: ${obj.id}`}
+                    await fs.promises.writeFile(this.file, JSON.stringify([productoNuevo], null, 2));
+                    return {status: "success",message: `Producto registrado. ID: ${productoNuevo.id}`}
                 }catch{
-                    return {status:"error",message:"No se pudo agregar el producto"}
+                    return {status: "error",message: "No se pudo agregar el producto"}
                 }
             }
         }catch{
-            try{
-                await fs.promises.writeFile(this.file , JSON.stringify([obj], null, 2));
-                return {status: "success",message: `Producto registrado. ID: ${obj.id}`}
-            }catch{
-                return {status: "error",message: "No se pudo agregar el producto"}
-            }
+            return {status: "error", message: "Error al crear el producto"}
         }
+        
     }    
 
     async getById (id){
@@ -68,27 +74,15 @@ class Contenedor {
             console.log(err);
         }
     }
-    getAll(){
-
-        const recuperarObjetos = async () => {
-            try {
-                const res = await fs.promises.readFile(this.file, 'UTF-8')
-                if (res.length == 0 || res == '[]') {
-                    return {error: 'El contenedor esta vacio'}
-                } else {
-                    const db = JSON.parse(res)
-                    //console.log(db);
-                    return db
-                }
-            }
-            catch (err){
-                console.log(err);
-            }
+    async getAll() {
+        try{
+            let archivo = await fs.promises.readFile(this.file, 'utf-8');
+            let productos = JSON.parse(archivo);
+            return {status: "success", message: productos};
+        }catch{
+            //El archivo no existe
+            return {status: "error", message: "El archivo no existe"}
         }
-
-        let response = recuperarObjetos().then((res) => {return res})
-        return response
-
     }
     
     async deleteById (id) {

@@ -1,5 +1,4 @@
 let socket = io.connect();
-
 const input = document.getElementById("chat-input");
 const email = document.getElementById("email-input");
 const articulo = document.getElementById("articulo-input");
@@ -18,36 +17,21 @@ socket.on("mensajes", function (msjs) {
 
 socket.on("productos", (arts) => {
 
-  /* fetch('http://localhost:8080/tablita.ejs')
-    .then(function(response) {
-        // When the page is loaded convert it to text
-        return response.text()
-    })
-    .then(function(ejs) {
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(ejs, "text/html");
-        document.getElementById("arts").innerHTML = doc.body.innerHTML
-    })
-    .catch(function(err) {  
-        console.log('Failed to fetch page: ', err);  
-    }); */
-
   document.getElementById("arts").innerHTML =  arts
     .map(
       (art) =>
         ` <tr><td>${art.title}</td><td>$${art.price}</td><td><img class="medicine"
-          src="${art.thumbnail}">
-          </td></tr> `
+          src="${art.thumbnail}"></td>
+          </tr> `
     )
     .join("<br>");
 });
 //<--
-
-//--> envuio al server
+//--> envio al server
 document.getElementById("chat-btn").addEventListener("click", () => {
   const fyh = new Date().toLocaleString();
   email.value
-    ? socket.emit("mensaje", { msj: input.value, email: email.value, fyh: fyh })
+    ? socket.emit("mensaje", { msj: input.value, email: email.value, fyh: fyh})
     : alert("Debe ingresar su email");
 });
 
@@ -55,7 +39,7 @@ document.getElementById("form-btn").addEventListener("click", () => {
   socket.emit("producto", {
     title: articulo.value,
     price: precio.value,
-    thumbnail: miniatura.value,
+    thumbnail: miniatura.value
   });
 });
 //<--

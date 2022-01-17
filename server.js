@@ -8,9 +8,10 @@ const io = new Server(server);
 const router = require("./routes/productos.js");
 const fetch = require("cross-fetch");
 const fs = require("fs");
-
+const administrador = true;
 const mensajes  = [];
 const articulos = [];
+const carritoRouter = require('./routes/carrito.js')
 
 const respProductos = async () => {
 
@@ -51,10 +52,17 @@ app.set("views", "./views");
 
 //Router API
 app.use("/", router);
+app.use('/carrito', carritoRouter);
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static(path.join(__dirname, "views")));
+app.use((req, res, next)=>{
+  req.auth = administrador;
+  next();
+})
+app.use(function(req, res){
+  res.status(404).send({"error": -2, "descripcion": `ruta ${req.url} método ${req.method} no implementada`});
+});
 
 io.on("connection", (socket) => {
 
@@ -85,7 +93,7 @@ io.on("connection", (socket) => {
 
 
 //Server
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
   console.log(`Servidor escuchando en el puerto ${server.address().port}`);
 });
