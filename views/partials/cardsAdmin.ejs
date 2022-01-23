@@ -1,0 +1,57 @@
+<div id='contenedor-articulos' class='articulos media-contenedor-arts'>
+    <%if (!productos == []) { %>
+    <% productos.forEach((el)=> { %>
+    <div class="articulos" id="<%= el.id %>">
+        <img src="<%= el.thumbnail %>" alt=""
+            style="width: 50%; height: auto;">
+        <h5>
+            <%=el.title%>
+        </h5><span>
+            <h6>Descripcion: <%=el.title%>
+                <h6>
+        </span>
+        <p>Precio: $<%=el.price%>
+        </p>
+        <button class="btn btn-danger" id="eliminarItem" onclick="eliminar('<%=el.id%>')">Eliminar</button><button
+            type="button" class="btn btn-success" data-toggle="modal"
+            data-target="#editModal<%=el.id%>">Actualizar</button><span></span>
+    </div>
+    <div class="modal fade" id="editModal<%=el.id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Editar producto</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="formulario">
+                            <div class="form-group">
+                                <label for="title">Articulo</label>
+                                <input type="text" name="title" placeholder="Titulo" class="form-control" id="actuTitle<%=el.id%>">
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Precio</label>
+                                <input type="float" name="price" placeholder="Precio" class="form-control" id="actuPrice<%=el.id%>">
+                            </div>
+                            <div class="form-group">
+                                <label for="thumbnail">Imagen</label>
+                                <input type="text" name="thumbnail" placeholder="Url imagen" class="form-control" id="actuThumbnail<%=el.id%>">
+                            </div>
+                            <button type="submit" class="btn btn-primary"
+                                onclick="actualizar('<%=el.id%>','{id: <%=el.id%>, title: <%=el.title%>, price: <%=el.price%>, thumbnail: <%=el.thumbnail%>}')">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% }) %>
+    <% }else {%>
+    <p style="text-align: center;">No se encontraron productos</p>
+    <% } %>
+
+</div>

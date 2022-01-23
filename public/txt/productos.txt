@@ -1,1 +1,57 @@
-[{"title":"Escuadra","price":123.45,"thumbnail":"https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png","id":1},{"title":"Calculadora","price":234.56,"thumbnail":"https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png","id":2,"stock":4},{"title":"Globo Terráqueo","price":345.67,"thumbnail":"https://cdn3.iconfinder.com/data/icons/education-209/64/globe-earth-geograhy-planet-school-256.png","id":3},{"title":"Notebook Gamer","price":"35000","thumbnail":"https://cdn1.iconfinder.com/data/icons/office-171/32/office-03-256.png","id":4},{"title":"Mesa de Pool","price":"13000","thumbnail":"https://cdn2.iconfinder.com/data/icons/sports-apparel/24/sports-apparel-20-256.png","id":5},{"title":"Reposera","price":253,"thumbnail":"https://cdn1.iconfinder.com/data/icons/office-171/32/office-10-256.png","id":6},{"title":"Teclado Mecanico","price":"3200","thumbnail":"https://cdn0.iconfinder.com/data/icons/zondicons/20/keyboard-128.png","id":7},{"title":"Mouse","price":"8700","thumbnail":"https://cdn3.iconfinder.com/data/icons/essential-pack/32/21-Mouse-128.png","id":8},{"title":"Celular","price":"5000","thumbnail":"https://cdn1.iconfinder.com/data/icons/seo-outline-colored-free/128/Smartphone_iphone_phone-256.png","id":9}]
+[
+  {
+    "title": "Escuadra",
+    "price": 123.45,
+    "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png",
+    "id": 1
+  },
+  {
+    "title": "Calculadora",
+    "price": 234.56,
+    "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png",
+    "id": 2,
+    "stock": 4
+  },
+  {
+    "title": "Globo Terráqueo",
+    "price": 345.67,
+    "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/globe-earth-geograhy-planet-school-256.png",
+    "id": 3
+  },
+  {
+    "title": "Notebook Gamer",
+    "price": "35000",
+    "thumbnail": "https://cdn1.iconfinder.com/data/icons/office-171/32/office-03-256.png",
+    "id": 4
+  },
+  {
+    "title": "Mesa de Pool",
+    "price": "13000",
+    "thumbnail": "https://cdn2.iconfinder.com/data/icons/sports-apparel/24/sports-apparel-20-256.png",
+    "id": 5
+  },
+  {
+    "title": "Silla Gamer",
+    "price": 7500,
+    "thumbnail": "https://cdn1.iconfinder.com/data/icons/office-171/32/office-10-256.png",
+    "id": 6
+  },
+  {
+    "title": "Teclado Mecanico",
+    "price": "3200",
+    "thumbnail": "https://cdn0.iconfinder.com/data/icons/zondicons/20/keyboard-128.png",
+    "id": 7
+  },
+  {
+    "title": "Mouse",
+    "price": "8700",
+    "thumbnail": "https://cdn3.iconfinder.com/data/icons/essential-pack/32/21-Mouse-128.png",
+    "id": 8
+  },
+  {
+    "title":"Celular",
+    "price":"5000",
+    "thumbnail":"https://cdn1.iconfinder.com/data/icons/seo-outline-colored-free/128/Smartphone_iphone_phone-256.png",
+    "id":9
+  }
+]

@@ -1,0 +1,35 @@
+<% productos.forEach((el) => { %>
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Editando producto...</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="formulario">
+                        <form action="/api/productos/<%=el.id%>" method="PUT">
+                            <div class="form-group">
+                                <label for="title">Articulo</label>
+                                <input type="text" name="title" placeholder="Titulo" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Precio</label>
+                                <input type="float" name="price" placeholder="Precio" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="thumbnail">Imagen</label>
+                                <input type="text" name="thumbnail" placeholder="Url imagen" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary" onclick="actualizar('<%=el.id%>')">Enviar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+<% }) %>

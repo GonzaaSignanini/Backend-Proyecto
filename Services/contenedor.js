@@ -1,7 +1,5 @@
 const fs = require('fs');
-const Productos = require('./productos.js');
-const Utils = require('../lib/utils.js');
-        
+let db = [];
 class Contenedor {
     constructor (file) {
         this.file = file;
@@ -22,37 +20,34 @@ class Contenedor {
         })
     }
 
-    async save(producto) {
-        let id = this.maxId();
-        id += 1;
-        try{
-            let productoNuevo = new Productos(id, producto.nombre, Utils.dateNow, producto.descripcion, producto.codigo, producto.url,  producto.precio, producto.stock);
+    save(producto){        
+
+        const escribirProductos = async () => {
             try{
-                let fileProductos = await fs.promises.readFile(this.file, 'utf-8');
-                let productos = JSON.parse(fileProductos);
-                if(productos.some(prod => prod.nombre === productoNuevo.nombre)){
-                    return {status:"error",message: "El producto ya existe"};
-                }else{
-                    productos.push(productoNuevo);
-                    try{
-                        await fs.promises.writeFile(this.file, JSON.stringify(productos, null, 2));
-                        return {status:"success",message: `Producto registrado. ID: ${productoNuevo.id}`}
-                    }catch{
-                        return {status:"error",message:"No se pudo agregar el producto"}
-                    }
+                const res = await fs.promises.readFile(this.file, 'utf-8')
+                if(res.length == 0){
+                    producto.id = 1
+                    db.push(producto)
+                    await fs.promises.writeFile(this.file, JSON.stringify(db))
+                    return producto
+                }else {
+                    db = JSON.parse(res)
+                    producto.id = db[db.length - 1].id + 1
+                    db.push(producto)
+                    await fs.promises.writeFile(this.file, JSON.stringify(db))
+                    return producto
                 }
-            }catch{
-                try{
-                    await fs.promises.writeFile(this.file, JSON.stringify([productoNuevo], null, 2));
-                    return {status: "success",message: `Producto registrado. ID: ${productoNuevo.id}`}
-                }catch{
-                    return {status: "error",message: "No se pudo agregar el producto"}
-                }
+                
             }
-        }catch{
-            return {status: "error", message: "Error al crear el producto"}
+            catch (err) {
+                console.log(`${err} No se encuentra el archivo ${this.file}, se procede a crearlo`)
+                await fs.promises.writeFile(this.file, '')
+            }
         }
         
+        let respuesta = escribirProductos().then((res) => {return res})
+        return respuesta
+
     }    
 
     async getById (id){
@@ -74,15 +69,27 @@ class Contenedor {
             console.log(err);
         }
     }
-    async getAll() {
-        try{
-            let archivo = await fs.promises.readFile(this.file, 'utf-8');
-            let productos = JSON.parse(archivo);
-            return {status: "success", message: productos};
-        }catch{
-            //El archivo no existe
-            return {status: "error", message: "El archivo no existe"}
+    getAll(){
+
+        const recuperarObjetos = async () => {
+            try {
+                const res = await fs.promises.readFile(this.file, 'UTF-8')
+                if (res.length == 0 || res == '[]') {
+                    return {error: 'El contenedor esta vacio'}
+                } else {
+                    const db = JSON.parse(res)
+                    //console.log(db);
+                    return db
+                }
+            }
+            catch (err){
+                console.log(err);
+            }
         }
+
+        let response = recuperarObjetos().then((res) => {return res})
+        return response
+
     }
     
     async deleteById (id) {
@@ -138,6 +145,35 @@ class Contenedor {
             return id;
         }
         return id;
+    }
+
+    updateById(n, object){
+
+        const actualizarProductos = async () => {
+            try{
+                const res = await fs.promises.readFile(this.archivo, 'UTF-8')
+                db = JSON.parse(res)
+                const filtroId = db.filter((el) => {return el.id == n})
+                if(filtroId[0] == undefined){
+                    //console.log(`No se encontraron objetos con id ${n}`)
+                    return {error: 'producto no encontrado'}
+                }else{
+                    object.id = filtroId[0].id
+                    filtroId[0] = object
+                    db[--n] = filtroId[0]
+                    await fs.promises.writeFile(this.archivo, JSON.stringify(db))
+                    //console.log(`Se ha actualizado el producto con id ${filtroId[0].id}`)
+                    return {correcto: `se ha actualizado el producto ${filtroId[0].id}`}
+                }            
+            }
+            catch (err) {
+                console.log(`${err} No se encuentra el archivo ${this.archivo}, se procede a crearlo`)
+            }
+        }
+        
+        let response = actualizarProductos().then((res) => {return res})
+        return response
+
     }
 }
 

@@ -1,0 +1,36 @@
+<div id='contenedor-articulos' class='articulos media-contenedor-arts'>
+    <%if (!productos == []) { %>
+    <% productos.forEach((el) => { %>
+    <div class="articulos">
+        <img src="<%= el.thumbnail %>" alt=""
+            style="width: 50%; height: auto;">
+        <h5><%=el.title%></h5><span>
+            <h6>Descripcion: <%=el.title%><h6>
+        </span>
+        <p>Precio: $<%=el.price%></p>
+        <button class="btn btn-dark" style="width: 100%;"
+            onclick="carritoAgregarProducto('<%=el.id%>')">Agregar</button>
+    </div>
+    <div class="modal fade" id="compraModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Carrito de compras</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container" id='carrito'>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-comprar" onclick="comprar()">Comprar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% }) %>
+    <% }else {%>
+    <p style="text-align: center;">No se encontraron productos</p>
+    <% } %>
+</div>

@@ -1,100 +1,26 @@
-const express = require("express");
-const path = require("path");
-const app = express();
-const http = require("http");
-const server = http.createServer(app);
-const { Server } = require("socket.io");
-const io = new Server(server);
-const router = require("./routes/productos.js");
-const fetch = require("cross-fetch");
-const fs = require("fs");
-const administrador = true;
-const mensajes  = [];
-const articulos = [];
-const carritoRouter = require('./routes/carrito.js')
+const express = require('express')
+const app = express()
+const indexRouter = require('./routes/indexRouter')
+const shopRouter = require('./routes/shopRouter')
+const path = require('path')
 
-const respProductos = async () => {
-
-  const listar = async () => {
-      const response = await fetch("http://localhost:8080/txt/productos.txt", {method: "GET"});
-      const res = await response.json()
-      res.forEach(element => {
-        articulos.push(element)
-      });
-      return res
-  }
-
-  let response = await listar().then((res) => {return res})
-  return response
-  
-}
-respProductos()
-
-const respMensajes = async () => {
-
-  const listar = async () => {
-      const response = await fetch("http://localhost:8080/txt/mensajes.txt", {method: "GET"});
-      const res = await response.json()
-      res.forEach(element => {
-        mensajes.push(element)
-      });
-      return res
-  }
-
-  let response = await listar().then((res) => {return res})
-  return response
-  
-}
-respMensajes()
-
-app.set("view engine", "ejs");
-app.set("views", "./views");
+//View engine
+app.set('view engine', 'ejs')
+app.set('views', './views');
 
 //Router API
-app.use("/", router);
-app.use('/carrito', carritoRouter);
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
-app.use((req, res, next)=>{
-  req.auth = administrador;
-  next();
-})
-app.use(function(req, res){
-  res.status(404).send({"error": -2, "descripcion": `ruta ${req.url} método ${req.method} no implementada`});
-});
-
-io.on("connection", (socket) => {
-
-  console.log(`Conexión establecida - usuario: ${socket.id}`);
-  socket.on("disconnect", () => {
-    console.log(`Usuario ${socket.id} desconectado`);
-  });
-
-  //--> envio al cliente
-  socket.emit("mensajes", mensajes);
-  socket.emit("productos", articulos);
-  //<--
-
-  //--> recibo del cliente
-  socket.on("producto", async (data) => {
-    articulos.push(data);
-    await fs.promises.writeFile('./public/txt/productos.txt', JSON.stringify(articulos))
-    io.sockets.emit("productos", articulos);
-  });
-  socket.on("mensaje", async (data) => {
-    mensajes.push({ email: data.email, fyh: data.fyh, mensaje: data.msj });
-    await fs.promises.writeFile('./public/txt/mensajes.txt', JSON.stringify(mensajes))
-    io.sockets.emit("mensajes", mensajes);
-  });
-  //<--
-
-});
+app.use(express.urlencoded({ extended: false }))
+app.use(express.static(path.join(__dirname, 'public')))
+app.use('/', indexRouter)
+app.use('/api', shopRouter)
 
 
-//Server
-const PORT = process.env.PORT || 8080;
-server.listen(PORT, () => {
-  console.log(`Servidor escuchando en el puerto ${server.address().port}`);
-});
-server.on("error", (error) => console.log(`Error en servidor ${error}`));
+///Server
+const PORT = process.env.PORT || 8080
+const server = app.listen(PORT, () => {
+    console.log(`Servidor escuchando el puerto ${server.address().port}`)
+}) 
+server.on("error", error => console.log(`${error}`))                  
+
+module.exports = app

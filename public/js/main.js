@@ -1,45 +1,75 @@
-let socket = io.connect();
-const input = document.getElementById("chat-input");
-const email = document.getElementById("email-input");
-const articulo = document.getElementById("articulo-input");
-const precio = document.getElementById("precio-input");
-const miniatura = document.getElementById("miniatura-input");
+let pedido = [];
+let productos = [];
+const carrito = document.getElementById('carrito');
+const contador= document.getElementById('carrito-contador');
+const recuperarProductos = async () => {
+    const res = await fetch(`./txt/productos.txt`)
+    const data = await res.json()
+    productos = data;
+}
+recuperarProductos()
 
-//--> recibo del server
-socket.on("mensajes", function (msjs) {
-  document.getElementById("msjs").innerHTML = msjs
-    .map(
-      (msj) =>
-        `<span style="color:blue"><b>${msj.email}</b></span> <span style="color:brown">[ ${msj.fyh}]</span>: <span style="font-family:italic; color:green">${msj.mensaje}</span>`
-    )
-    .join("<br>");
-});
+const eliminar = (id) => {
+    const eliminarId = async () => {
+        const res = await fetch(`http://localhost:8080/api/productos/${id}`, {method: 'DELETE'})
+        const data = res.json()
+        return data
+    }
+    const response = eliminarId().then(res => res)
+    location.reload()
+    return response
+}
 
-socket.on("productos", (arts) => {
+const actualizar = (id, obj) => {
+    let actuTitle = document.getElementById(`actuTitle${id}`).value
+    let actuPrice = document.getElementById(`actuPrice${id}`).value
+    let actuThumbnail = document.getElementById(`actuThumbnail${id}`).value
+    obj = {title: actuTitle, price: actuPrice, thumbnail: actuThumbnail}
+    const actualizarId = async () => {
+        const res = await fetch(`http://localhost:8080/api/productos/${id}`, { method: 'PUT', body: JSON.stringify(obj), headers: {"Content-type": "application/json"} })
+        const data = res.json()
+        return data
+    }
+    const response = actualizarId().then(res => res)
+    location.reload()
+    return response 
+}
 
-  document.getElementById("arts").innerHTML =  arts
-    .map(
-      (art) =>
-        ` <tr><td>${art.title}</td><td>$${art.price}</td><td><img class="medicine"
-          src="${art.thumbnail}"></td>
-          </tr> `
-    )
-    .join("<br>");
-});
-//<--
-//--> envio al server
-document.getElementById("chat-btn").addEventListener("click", () => {
-  const fyh = new Date().toLocaleString();
-  email.value
-    ? socket.emit("mensaje", { msj: input.value, email: email.value, fyh: fyh})
-    : alert("Debe ingresar su email");
-});
+const carritoAgregarProducto = (ID) => {
+    let articuloPedido = pedido.find(el => el.id == ID)
+    if (articuloPedido) {
+        articuloPedido.cantidad += 1
+    } else {
+        let {title, price, thumbnail, id} = productos.find( el => el.id == ID)
+        pedido.push({id: id, title: title, price: price, thumbnail: thumbnail, cantidad: 1})
+    }
+    carritoGuardarProducto()    
+}
 
-document.getElementById("form-btn").addEventListener("click", () => {
-  socket.emit("producto", {
-    title: articulo.value,
-    price: precio.value,
-    thumbnail: miniatura.value
-  });
-});
-//<--
+const carritoGuardarProducto = () => {
+    carrito.innerHTML = ''
+    pedido.forEach( (articulo) => {
+        const div = document.createElement('div')
+        div.classList.add('articuloPedido')
+        div.innerHTML = `
+                        <img src="${articulo.thumbnail}" class="imgCarrito"></img>
+                        <p>Artículo: ${articulo.title}</p>
+                        <p>Precio: $${articulo.price * articulo.cantidad}</p>
+                        <p>Cantidad: ${articulo.cantidad}</p>
+                        <button onclick=eliminarProducto(${articulo.id}) class="btn btn-danger btn-eliminar">Eliminar</button>
+                    `
+        carrito.appendChild(div)
+    })
+    contador.innerText = pedido.length
+    //total.innerText = pedido.reduce( (acc, el) => acc + (el.precio * el.cantidad), 0 )
+}
+
+function eliminarProducto(id) {
+    let articuloEliminado = pedido.find( el => el.id == id )
+    articuloEliminado.cantidad--
+    if (articuloEliminado.cantidad == 0) {
+        let indice = pedido.indexOf(articuloEliminado)
+        pedido.splice(indice, 1)
+    }
+    carritoGuardarProducto()
+}
