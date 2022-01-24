@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Contenedor = require('../Services/contenedor');
-const productos = new Contenedor('./public/txt/productos.txt');
+const productos = new Contenedor();
 
 
 let session = {}

@@ -10,14 +10,14 @@ app.set('views', './views');
 
 //Router API
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/', indexRouter)
 app.use('/api', shopRouter)
 
 
 ///Server
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 8080;
 const server = app.listen(PORT, () => {
     console.log(`Servidor escuchando el puerto ${server.address().port}`)
 }) 
