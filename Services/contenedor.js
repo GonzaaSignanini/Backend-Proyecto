@@ -49,7 +49,7 @@ class Contenedor {
     save(producto){   
         let id = this.maxId();
         id += 1;     
-        let productoNuevo = new Productos(producto.codigo, producto.title, Utils.dateNow, producto.stock, producto.thumbnail, producto.price, id);
+        let productoNuevo = new Productos(producto.title, producto.price, producto.thumbnail, Utils.dateNow, producto.codigo, producto.stock, id);
         producto = productoNuevo;
         const escribirProductos = async () => {
             try{

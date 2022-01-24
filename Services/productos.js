@@ -1,11 +1,11 @@
 class Productos{
-    constructor(id, title, timestamp, codigo, thumbnail, price, stock) {
+    constructor(title, price, thumbnail, timestamp, codigo, stock, id) {
         this.title = title;
         this.price = price;
         this.thumbnail = thumbnail;
         this.timestamp = timestamp;
-        this.stock = stock;
         this.codigo = codigo;
+        this.stock = stock;
         this.id = id;
     }
 }
