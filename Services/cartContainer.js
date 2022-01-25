@@ -61,11 +61,11 @@ class ContenedorCarrito{
             }else{
                 let carritoElegido = carritos[index];
                 let producto = new Contenedor();
-                if (carritoElegido.producto.findIndex(prod => prod.id === productoAdd.id) === -1){
+                if (carritoElegido.productos.findIndex(prod => prod.id === productoAdd.id) === -1){
                     let agregar = (await producto.getById(productoAdd.id));
                     if(agregar.status === "success"){
                         agregar.message.stock = productoAdd.stock;
-                        carritoElegido.producto.push(agregar.message);
+                        carritoElegido.productos.push(agregar.message);
                         let carritoNuevo = carritos.map((cart)=>{
                             if(cart.id === number){
                                 return carritoElegido;

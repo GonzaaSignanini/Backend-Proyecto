@@ -79,23 +79,18 @@ class Contenedor {
 
     }    
 
-    async getById (id){
-        try {
-            const productos = fs.readFileSync(productUrl, 'utf-8');
-            if (productos === '') {
-                return console.log("no hay productos en la base de datos");
-            } else {
-                const arrProds = JSON.parse(productos);
-                const existe = arrProds.filter(item => item.id === id);
-                if (existe.length) {
-                    return existe;
-                } else {
-                    return;
-                }
+    async getById(number) {
+        try{
+            let archivo = await fs.promises.readFile(productUrl, 'utf-8');
+            let productos = JSON.parse(archivo);
+            let index = productos.findIndex(prod => prod.id === number);
+            if(index === -1){
+                return {status: "error", message: "El id no existe"}    
+            }else{
+                return {status: "success", message: productos[index]}
             }
-        }
-        catch (err){
-            console.log(err);
+        }catch{
+            return {status: "error", message: "Archivo no encontrado"}
         }
     }
     getAll(){
