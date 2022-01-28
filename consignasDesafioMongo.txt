@@ -1,0 +1,219 @@
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+> use ecommerce
+switched to db ecommerce
+> db
+ecommerce
+
+/ AGREGAR 10 PRODUCTOS A UNA COLECCION LLAMADA PRODUCTOS /
+
+> db.productos.insertMany([{title: "Escuadra", price: 123.45}, {title: "Calculadora", price: 234.56}, {title: "Globo Terráqueo", price: 345.67}, {title: "Notebook Gamer", price: 4980}, {title: "Mesa de Pool", price: 2340}, {title: "Silla Gamer", price: 1550}, {title: "Teclado Mecanico", price: 764},{title: "Mouse", price: 1010}, {title: "Celular", price: 3570}, {title: "Tablet", price: 3152} ])
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("61f306bf4e49e9662b29ea5e"),
+                ObjectId("61f306bf4e49e9662b29ea5f"),
+                ObjectId("61f306bf4e49e9662b29ea60"),
+                ObjectId("61f306bf4e49e9662b29ea61"),
+                ObjectId("61f306bf4e49e9662b29ea62"),
+                ObjectId("61f306bf4e49e9662b29ea63"),
+                ObjectId("61f306bf4e49e9662b29ea64"),
+                ObjectId("61f306bf4e49e9662b29ea65"),
+                ObjectId("61f306bf4e49e9662b29ea66"),
+                ObjectId("61f306bf4e49e9662b29ea67")
+        ]
+}
+> show collections
+productos
+
+/////////////////////////////
+
+
+/ LISTAR TODOS LOS PRODUCTOS DE LA COLECCION /
+
+> db.productos.find()
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea5e"), "title" : "Escuadra", "price" : 123.45 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea5f"), "title" : "Calculadora", "price" : 234.56 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea60"), "title" : "Globo Terráqueo", "price" : 345.67 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea61"), "title" : "Notebook Gamer", "price" : 4980 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea62"), "title" : "Mesa de Pool", "price" : 2340 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea63"), "title" : "Silla Gamer", "price" : 1550 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea64"), "title" : "Teclado Mecanico", "price" : 764 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea65"), "title" : "Mouse", "price" : 1010 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea66"), "title" : "Celular", "price" : 3570 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea67"), "title" : "Tablet", "price" : 3152 }
+
+//////////////////////////////////////
+
+/ MOSTRAR CANTIDAD DE DOCUMENTOS ALMACENADOS /
+
+> db.productos.countDocuments({})
+10
+
+/////////////////////////////////
+
+/ AGREGAR UN PRODUCTO MAS A LA COLECCION /
+
+> db.productos.insertOne({"title" : "Aire Acondicionado", "price" : 4256})
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("61f307a64e49e9662b29ea68")
+}
+
+//////////////////////////////////
+
+/ REALIZAR CONSULTA POR NOMBRE DE UN PRODUCTO ESPECIFICO /
+
+> db.productos.find({"title" : "Notebook Gamer"})
+
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea61"), "title" : "Notebook Gamer", "price" : 4980 }
+
+///////////////////////////////////
+
+/ LISTAR PRODUCTOS CON PRECIO MENOR A 1000 /
+
+> db.productos.find({"price": {$lt: 1000}})
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea5e"), "title" : "Escuadra", "price" : 123.45 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea5f"), "title" : "Calculadora", "price" : 234.56 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea60"), "title" : "Globo Terráqueo", "price" : 345.67 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea64"), "title" : "Teclado Mecanico", "price" : 764 }
+
+//////////////////////////////////////
+
+/ LISTAR PRODUCTOS DE PRECIO ENTRE 1000 Y 3000 /
+
+db.productos.find({$and: [{"price": {$gt: 1000}}, {"price": {$lt: 3000}}]})
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea62"), "title" : "Mesa de Pool", "price" : 2340 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea63"), "title" : "Silla Gamer", "price" : 1550 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea65"), "title" : "Mouse", "price" : 1010 }
+
+///////////////////////////////////////
+
+/ LISTAR PRODUCTOS CON PRECIO MAYOR A 3000 /
+
+db.productos.find({"price": {$gt: 3000}})
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea61"), "title" : "Notebook Gamer", "price" : 4980 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea66"), "title" : "Celular", "price" : 3570 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea67"), "title" : "Tablet", "price" : 3152 }
+{ "_id" : ObjectId("61f307a64e49e9662b29ea68"), "title" : "Aire Acondicionado", "price" : 4256 }
+
+//////////////////////////////////////////
+
+/ CONSULTA QUE TRAIGA EL NOMBRE DEL 3 PRODUCTO MAS BARATO /
+
+> db.productos.find({}, {"title": 1}).skip(2).limit(1).sort({"price": 1})
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea60"), "title" : "Globo Terráqueo" }
+
+//////////////////////////////////////////
+
+/ AGREGAR CAMPO STOCK A TODOS LOS PRODUCTOS /
+
+db.productos.update( {}, {$set: {"stock": 100}}, false, true)
+WriteResult({ "nMatched" : 11, "nUpserted" : 0, "nModified" : 11 })
+
+db.productos.find()
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea5e"), "title" : "Escuadra", "price" : 123.45, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea5f"), "title" : "Calculadora", "price" : 234.56, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea60"), "title" : "Globo Terráqueo", "price" : 345.67, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea61"), "title" : "Notebook Gamer", "price" : 4980, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea62"), "title" : "Mesa de Pool", "price" : 2340, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea63"), "title" : "Silla Gamer", "price" : 1550, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea64"), "title" : "Teclado Mecanico", "price" : 764, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea65"), "title" : "Mouse", "price" : 1010, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea66"), "title" : "Celular", "price" : 3570, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea67"), "title" : "Tablet", "price" : 3152, "stock" : 100 }
+{ "_id" : ObjectId("61f307a64e49e9662b29ea68"), "title" : "Aire Acondicionado", "price" : 4256, "stock" : 100 }
+
+/////////////////////////////////////////////
+
+/ CAMBIAR STOCK A 0 DE LOS PRODUCTOS CON PRECIO MAYOR A 4000 /
+
+> db.productos.update( {"price": {$gt: 4000}}, {$set: {"stock": 0}}, false, true)
+WriteResult({ "nMatched" : 2, "nUpserted" : 0, "nModified" : 2 })
+
+> db.productos.find()
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea5e"), "title" : "Escuadra", "price" : 123.45, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea5f"), "title" : "Calculadora", "price" : 234.56, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea60"), "title" : "Globo Terráqueo", "price" : 345.67, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea61"), "title" : "Notebook Gamer", "price" : 4980, "stock" : 0 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea62"), "title" : "Mesa de Pool", "price" : 2340, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea63"), "title" : "Silla Gamer", "price" : 1550, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea64"), "title" : "Teclado Mecanico", "price" : 764, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea65"), "title" : "Mouse", "price" : 1010, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea66"), "title" : "Celular", "price" : 3570, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea67"), "title" : "Tablet", "price" : 3152, "stock" : 100 }
+{ "_id" : ObjectId("61f307a64e49e9662b29ea68"), "title" : "Aire Acondicionado", "price" : 4256, "stock" : 0 }
+
+//////////////////////////////////////////////
+
+
+/ BORRAR LOS PRODUCTOS CON PRECIO MENOR A 1000 /
+
+> db.productos.deleteMany({"price": {$lt: 1000}})
+{ "acknowledged" : true, "deletedCount" : 4 }
+
+
+> db.productos.find()
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea61"), "title" : "Notebook Gamer", "price" : 4980, "stock" : 0 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea62"), "title" : "Mesa de Pool", "price" : 2340, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea63"), "title" : "Silla Gamer", "price" : 1550, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea65"), "title" : "Mouse", "price" : 1010, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea66"), "title" : "Celular", "price" : 3570, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea67"), "title" : "Tablet", "price" : 3152, "stock" : 100 }
+{ "_id" : ObjectId("61f307a64e49e9662b29ea68"), "title" : "Aire Acondicionado", "price" : 4256, "stock" : 0 }
+
+////////////////////////////////////////////
+
+/ CREAR USUARIO QUE SOLO PUEDA LEER LA BASE DE DATOS  /
+
+use admin
+switched to db admin
+> db.createUser({"user": "pepe", "pwd": "asd456", "roles": [{ "role": "read", "db": "ecommerce"}]})
+Successfully added user: {
+        "user" : "pepe",
+        "roles" : [
+                {
+                        "role" : "read",
+                        "db" : "ecommerce"
+                }
+        ]
+}
+
+/ CERRAR BASE DE DATOS Y VOLVER A INICIAR CON EL SIGUIENTE COMANDO /
+
+mongod --auth --port 27017 --dbpath "C:\Users\gonza\Desktop\Proyecto - Backend\mongo\"
+
+mongo -u pepe -p asd456
+use ecommerce
+switched to db ecommerce
+
+> db.productos.find()
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea61"), "title" : "Notebook Gamer", "price" : 4980, "stock" : 0 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea62"), "title" : "Mesa de Pool", "price" : 2340, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea63"), "title" : "Silla Gamer", "price" : 1550, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea65"), "title" : "Mouse", "price" : 1010, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea66"), "title" : "Celular", "price" : 3570, "stock" : 100 }
+{ "_id" : ObjectId("61f306bf4e49e9662b29ea67"), "title" : "Tablet", "price" : 3152, "stock" : 100 }
+{ "_id" : ObjectId("61f307a64e49e9662b29ea68"), "title" : "Aire Acondicionado", "price" : 4256, "stock" : 0 }
+
+db.productos.insertOne({"title":"p"})
+
+uncaught exception: WriteCommandError({
+        "ok" : 0,
+        "errmsg" : "not authorized on ecommerce to execute command { insert: \"productos\", ordered: true, lsid: { id: UUID(\"6b07fe9d-4b0a-44d3-86dd-18034ceaf2c5\") }, $db: \"ecommerce\" }",
+        "code" : 13,
+        "codeName" : "Unauthorized"
+}) :
+WriteCommandError({
+        "ok" : 0,
+        "errmsg" : "not authorized on ecommerce to execute command { insert: \"productos\", ordered: true, lsid: { id: UUID(\"6b07fe9d-4b0a-44d3-86dd-18034ceaf2c5\") }, $db: \"ecommerce\" }",
+        "code" : 13,
+        "codeName" : "Unauthorized"
+})
+WriteCommandError@src/mongo/shell/bulk_api.js:421:48
+executeBatch@src/mongo/shell/bulk_api.js:936:23
+Bulk/this.execute@src/mongo/shell/bulk_api.js:1182:21
+DBCollection.prototype.insertOne@src/mongo/shell/crud_api.js:264:9
+@(shell):1:1
