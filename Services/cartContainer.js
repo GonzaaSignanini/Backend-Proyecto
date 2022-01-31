@@ -44,7 +44,7 @@ class ContenedorCarrito{
                 return {status: "error", message: "El id no existe"}    
             }else{
                 let carritoElegido = carritos[index];
-                return {status: "success", message: carritoElegido.producto}
+                return {status: "success", message: carritoElegido.productos}
             }
         }catch{
             return {status: "error", message: "Archivo no encontrado"}

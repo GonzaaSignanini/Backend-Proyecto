@@ -1,0 +1,29 @@
+<table class="table">
+    <thead class="thead-dark">
+        <th>Articulo</th>
+        <th>Precio</th>
+        <th>Imagen</th>
+    </thead>
+
+    <tbody>
+
+        <% if (productos) { %>
+        <% productos.forEach((el) => {%>
+        <tr>
+            <td><%=el.title%></td>
+            <td><%=el.price%></td>
+            <td><img class="medicine"
+                    src="<%=el.thumbnail%>">
+            </td>
+        </tr>
+        <% })%>
+        <% } else { %>
+        <tr>
+            <td></td>
+            <td>No hay productos</td>
+            <td></td>
+        </tr>
+        <% } %>
+
+    </tbody>
+</table>
