@@ -16,13 +16,12 @@
   "bugs": {
     "url": "https://github.com/GonzaaSignanini/Backend-Proyecto/issues"
   },
-  "homepage": "https://github.com/GonzaaSignanini/Backend-Proyecto#readme",
   "dependencies": {
+    "dotenv": "^16.0.0",
     "ejs": "^3.1.6",
     "express": "^4.17.2",
-    "nodemon": "^2.0.15",
-    "knex": "^1.0.1",
-    "mysql": "^2.18.1",
-    "sqlite3": "^5.0.2"
+    "firebase-admin": "^10.0.2",
+    "mongoose": "^6.1.9",
+    "mysql": "^2.18.1"
   }
 }

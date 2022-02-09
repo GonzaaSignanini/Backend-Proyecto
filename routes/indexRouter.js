@@ -1,9 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Contenedor = require('../Services/contenedor');
-const productos = new Contenedor();
-
-
+const { products  } = require('../daos/index.js');
 let session = {}
 
 router.get('/', async (req, res) => {
@@ -14,12 +11,12 @@ router.post('/home', async (req, res) => {
     if(req.body.user == 'admin' && req.body.password == 123){
         session = {usr:req.body.user, pwd: req.body.password, role: req.body.user}
         console.log(session)
-        res.render('pages/indexAdmin', {productos: await productos.getAll()})
+        res.render('pages/indexAdmin', {productos: await products.getAll().then(result => {return result.payload})})
     }else{
         if(req.body.user == 'test' && req.body.password == 'test'){
             session = {usr:req.body.user, pwd: req.body.password, role: req.body.user}
             console.log(session)
-            res.render('pages/indexUser', {productos: await productos.getAll()})
+            res.render('pages/indexUser', {productos: await products.getAll().then(result => {return result.payload})})
         }else{
             res.redirect('/')
         }
@@ -28,7 +25,7 @@ router.post('/home', async (req, res) => {
 
 router.get('/home', async (req, res) => {
     if(session){
-        session.role == 'admin' ? res.render('pages/indexAdmin', {productos: await productos.getAll()}) : res.render('pages/indexUser', {productos: await productos.getAll()})
+        session.role == 'admin' ? res.render('pages/indexAdmin', {productos: await products.getAll().then(result => {return result.payload})}) : res.render('pages/indexUser', {productos: await products.getAll().then(result => {return result.payload})})
     }else{
         res.redirect('/')
     }

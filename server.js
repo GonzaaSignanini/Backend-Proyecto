@@ -14,15 +14,13 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/', indexRouter)
 app.use('/api', shopRouter)
-app.use(function(req, res){
-    res.status(404).send({"error": -2, "descripcion": `ruta ${req.url} método ${req.method} no implementada`});
-});
 
 ///Server
 const PORT = process.env.PORT || 8080;
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, async() => {
     console.log(`Servidor escuchando el puerto ${server.address().port}`)
 }) 
-server.on("error", error => console.log(`${error}`))                  
+server.on("error", error => console.log(`${error}`))     
+
 
 module.exports = app;

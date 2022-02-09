@@ -1,6 +1,6 @@
 const fs = require('fs');
 const Carrito = require('./carrito.js');
-const Contenedor = require('../Services/contenedor.js');
+const Contenedor = require('./contenedor.js');
 const Utils = require('../lib/utils.js');
 const carritosUrl = './public/txt/carritos.txt';
 

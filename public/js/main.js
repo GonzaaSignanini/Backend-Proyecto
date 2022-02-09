@@ -3,7 +3,7 @@ let productos = [];
 const carrito = document.getElementById('carrito');
 const contador= document.getElementById('carrito-contador');
 const recuperarProductos = async () => {
-    const res = await fetch(`./txt/productos.txt`)
+    const res = await fetch("./txt/productos.txt")
     const data = await res.json()
     productos = data;
 }
