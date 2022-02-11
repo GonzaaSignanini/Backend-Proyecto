@@ -11,7 +11,7 @@ module.exports =  class CartFirebase extends FirebaseContainer {
     async createCart(){
         try{
             const doc = await this.query.doc()
-            let newCart = await doc.set({products:[]})
+            let newCart = await doc.set({productos:[]})
             return {status:"succes", payload:newCart}
         }catch(err){
             return {status:"error", error:err.message}
@@ -22,8 +22,8 @@ module.exports =  class CartFirebase extends FirebaseContainer {
         try{
             const cartDoc = await this.query.doc(idNumber).get()
             const cart = cartDoc.data()
-            const products = [...cart.products, productId]
-            await this.query.doc(idNumber).set({products})
+            const productos = [...cart.productos, productId]
+            await this.query.doc(idNumber).set({productos})
             return {status:"success", message:`Product added to cart`}
         }catch(err){
             console.log(err)
@@ -47,8 +47,8 @@ module.exports =  class CartFirebase extends FirebaseContainer {
         try{
             const cartDoc = await this.query.doc(idNumber).get()
             const cart = cartDoc.data()
-            const products = cart.products.filter(prod => prod !== productId)
-            await this.query.doc(idNumber).set({ products: products})
+            const products = cart.productos.filter(prod => prod !== productId)
+            await this.query.doc(idNumber).set({ productos: products})
 
             return {status:"success", message:`product ${productId} deleted at cart ${idNumber}`}
         }catch(err){

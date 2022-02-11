@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { carts, persistence, products  } = require('../daos/index.js');
-const { authMiddleware } = require('../lib/utils.js');
 
 /*  ----------------------------------------- */
 

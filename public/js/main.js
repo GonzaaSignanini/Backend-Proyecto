@@ -20,6 +20,8 @@ const eliminar = (id) => {
     return response
 }
 
+// Para firebase actualizar desde base de datos de firebase
+
 const actualizar = (id, obj) => {
     let actuTitle = document.getElementById(`actuTitle${id}`).value
     let actuPrice = document.getElementById(`actuPrice${id}`).value

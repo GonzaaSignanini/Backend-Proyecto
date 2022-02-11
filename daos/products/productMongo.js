@@ -3,7 +3,7 @@ const MongoContainer = require("../../containers/MongoContainer.js");
 class ProductMongo extends MongoContainer{
     constructor(){
         super(
-            'products',
+            'productos',
             {   title: {
                     type:String,
                     required:true
@@ -16,7 +16,7 @@ class ProductMongo extends MongoContainer{
                     type:String,
                     required:true
                 }
-            }, { timestamps: true }
+            }
         )}
 
     async addProduct(product){

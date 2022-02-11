@@ -7,9 +7,9 @@ module.exports = class CartMongo extends MongoContainer{
         super(
             'carts',
             {
-                products:[{
+                productos:[{
                     type:Schema.Types.ObjectId,
-                    ref:'products',
+                    ref:'productos',
                 }]                
             },{ timestamps:true }
         )
@@ -17,7 +17,7 @@ module.exports = class CartMongo extends MongoContainer{
 
     async createCart(){
         try{
-            let newCart = await this.collection.create({products:[]})
+            let newCart = await this.collection.create({productos:[]})
             return {status:"succes", messagge:'new cart created', payload:newCart}
         }catch(err){
             return {status:"error", error:err.message}
@@ -26,7 +26,7 @@ module.exports = class CartMongo extends MongoContainer{
 
     async addProduct(idNumber, productId){
         try{
-            let result = await this.collection.updateOne({_id:idNumber},{$push:{products:productId}})
+            let result = await this.collection.updateOne({_id:idNumber},{$push:{productos:productId}})
             return {status:"success", payload:result}
         }catch(err){
             console.log(err)
@@ -38,8 +38,8 @@ module.exports = class CartMongo extends MongoContainer{
     async getProductsByCartId(idNumber){
         try{
             const cart = await this.collection.findById(idNumber)
-            const products = cart.products
-            return {status:"success", payload:products}
+            const productos = cart.productos
+            return {status:"success", payload:productos}
         }catch(err){
             return {status:"error", message:err}
         }
@@ -47,7 +47,7 @@ module.exports = class CartMongo extends MongoContainer{
 
     async deleteProduct(idNumber, productId){
         try{
-            let result = await this.collection.updateOne({_id:idNumber},{$pull:{products:productId}})
+            let result = await this.collection.updateOne({_id:idNumber},{$pull:{productos:productId}})
             return {status:"success", message:`product deleted at cart ${idNumber}`, payload:result}
         }catch(err){
             console.log(err)

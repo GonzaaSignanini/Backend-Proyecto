@@ -17,6 +17,12 @@
         "thumbnail": "https://cdn2.iconfinder.com/data/icons/sports-apparel/24/sports-apparel-20-256.png",
         "id": 5,
         "stock": 12
+      },
+      {
+        "title": "Mouse",
+        "price": "8700",
+        "thumbnail": "https://cdn3.iconfinder.com/data/icons/essential-pack/32/21-Mouse-128.png",
+        "id": 8
       }
     ]
   }

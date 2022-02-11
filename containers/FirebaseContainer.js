@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 const config = require('../config/config.js')
-const serviceAccount = require('')
+const serviceAccount = require('../daos/db/proyecto-backend-10ae8-firebase-adminsdk-naiww-96db8d142c.json')
 
 admin.initializeApp({
         credential:admin.credential.cert(serviceAccount),
@@ -34,7 +34,7 @@ class FirebaseContainer {
             }
         }
         catch(err){
-            return{status:"error", error:`Can't get entity with id:${id} on ${this.url} - ${err}`}
+            return{status:"error", error:`Can't get entity with id:${idNumber} on ${this.url} - ${err}`}
         }
     }
 
