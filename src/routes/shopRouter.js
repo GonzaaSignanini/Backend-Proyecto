@@ -19,10 +19,10 @@ router.get('/productos/:pid', (req, res) => {
     }else{
         id = req.params.pid
     }
-    products.getById(id)
-    .then(result=>{
+    products.getById(id).then(result=>{
         res.send(result)
     })
+    .catch(err => console.log(err)) 
 })
 
 
@@ -44,6 +44,7 @@ router.put('/productos/:pid', (req,res) => {
     products.updateProduct(id,body).then(result=>{
         res.send(result);
     })
+    .catch(err => console.log(err)) 
 })
 
 //DELETES
@@ -57,20 +58,22 @@ router.delete('/productos/:pid', (req,res) => {
     products.deleteById(id).then(result => {
         res.send(result)
     })
+    .catch(err => console.log(err)) 
 })
 
 router.delete('/productos/', (req,res) => {
     products.deleteAll().then(result => {
         res.send(result)
     })
+    .catch(err => console.log(err)) 
 })
 
 /*  ----------------------------------------- */
 
 //POSTS
 router.post('/carrito', (req, res) => {
-    carts.createCart()
-    .then(result => res.send(result))
+    carts.createCart().then(result => res.send(result))
+    .catch(err => console.log(err)) 
     console.log()
 })
 
@@ -84,8 +87,8 @@ router.post('/carrito/:cid/productos', (req, res) => {
         cartId = req.params.cid
         productId = req.body.id
     }
-    carts.addProduct(cartId, productId)
-    .then(result => res.send(result))
+    carts.addProduct(cartId, productId).then(result => res.send(result))
+    .catch(err => console.log(err)) 
 })
 
 //DELETES
@@ -96,8 +99,9 @@ router.delete('/carrito/:cid', (req, res) => {
     }else{
         id = req.params.cid
     }
-    carts.deleteById(id)
-    .then(result => res.send(result))
+    carts.deleteById(id).then(result => res.send(result)
+    )
+    .catch(err => console.log(err)) 
 })
 
 router.delete('/carrito/:cid/productos/:pid', (req, res) => {
@@ -110,8 +114,8 @@ router.delete('/carrito/:cid/productos/:pid', (req, res) => {
         cartId = req.params.cid
         productId = req.params.pid
     }
-    carts.deleteProduct(cartId, productId)
-    .then(result => res.send(result))
+    carts.deleteProduct(cartId, productId).then(result => res.send(result))
+    .catch(err => console.log(err)) 
 })
 
 
@@ -124,14 +128,15 @@ router.get('/carrito/:cid/productos', (req, res) => {
     }else{
         id = req.params.cid
     }
-    carts.getProductsByCartId(id)
-    .then(result => res.send(result))
+    carts.getProductsByCartId(id).then(result => res.send(result))
+    .catch(err => console.log(err)) 
 })
 
 router.get('/carrito', (req,res)=>{
     carts.getAll().then(result=>{
         res.send(result)
     })
+    .catch(err => console.log(err)) 
 })
 
 module.exports = router;

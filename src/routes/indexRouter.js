@@ -12,11 +12,13 @@ router.post('/home', async (req, res) => {
         session = {usr:req.body.user, pwd: req.body.password, role: req.body.user}
         console.log(session)
         res.render('pages/indexAdmin', {productos: await products.getAll().then(result => {return result.payload})})
+        .catch(err => console.log(err)) 
     }else{
         if(req.body.user == 'test' && req.body.password == 'test'){
             session = {usr:req.body.user, pwd: req.body.password, role: req.body.user}
             console.log(session)
             res.render('pages/indexUser', {productos: await products.getAll().then(result => {return result.payload})})
+            .catch(err => console.log(err)) 
         }else{
             res.redirect('/')
         }
@@ -26,6 +28,7 @@ router.post('/home', async (req, res) => {
 router.get('/home', async (req, res) => {
     if(session){
         session.role == 'admin' ? res.render('pages/indexAdmin', {productos: await products.getAll().then(result => {return result.payload})}) : res.render('pages/indexUser', {productos: await products.getAll().then(result => {return result.payload})})
+        .catch(err => console.log(err)) 
     }else{
         res.redirect('/')
     }
