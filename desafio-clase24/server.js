@@ -18,7 +18,7 @@ const chatsService = new ChatsService()
 export const getConnection = async ()=> {
     try{
         if (mongoose.connection.readyState === 0) {
-            await mongoose.connect('mongodb+srv://Gonzalo:gonza123456@cluster0.ldyb1.mongodb.net/ecommerce?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
+            await mongoose.connect('mongodb+srv://Gonzaa:gonzasignanini123@cluster0.2umrg.mongodb.net/ecommerce?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
         }
         } catch (err) {
             console.error(err)
@@ -69,7 +69,7 @@ app.use('/uploads/', express.static(__dirname + '/uploads'))
 app.use(express.static(__dirname + '/public'))
 
 app.use(session({
-    store: MongoStore.create({ mongoUrl:'mongodb+srv://Gonzalo:gonza123456@cluster0.ldyb1.mongodb.net/ecommerce?retryWrites=true&w=majority'}),
+    store: MongoStore.create({ mongoUrl:'mongodb+srv://Gonzaa:gonzasignanini123@cluster0.2umrg.mongodb.net/ecommerce?retryWrites=true&w=majority'}),
     secret:"f4b0",
     resave: true,
     saveUninitialized: true,

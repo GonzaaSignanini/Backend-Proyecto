@@ -6,7 +6,7 @@ const path = require('path')
 
 //View engine
 app.set('view engine', 'ejs')
-app.set('views', './views');
+app.set('views', './src/views');
 
 //Router API
 app.use(express.json());
@@ -24,3 +24,6 @@ server.on("error", error => console.log(`${error}`))
 
 
 module.exports = app;
+
+
+
