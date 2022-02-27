@@ -8,7 +8,7 @@ const initializePassportConfig = ()=> {
     passport.use('facebook', new FacebookStrategy({
         clientID:'699454348098278',
         clientSecret:'305dc108ae066fb394de22f921677d58',
-        callbackURL:'http://localhost:8080/auth/facebook/callback',
+        callbackURL:'https://backend-proyecto1.vercel.app/auth/facebook/callback',
         profileFields:['emails']
     },async (accessToken, refreshToken, profile, done)=>{
         try{
