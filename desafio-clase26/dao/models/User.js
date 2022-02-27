@@ -11,4 +11,4 @@ export const UserSchema = new Schema({
     avatar: { type: String, required: true }
 }, { timestamps: true })
 
-export const UserModel = model('User', UserSchema)
+export const UserModel = model('Facebook-User', UserSchema)
