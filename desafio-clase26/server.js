@@ -21,7 +21,7 @@ const chatsService = new ChatsService()
 export const getConnection = async ()=> {
     try{
         if (mongoose.connection.readyState === 0) {
-            await mongoose.connect('mongodb+srv://Gonzaa:gonzasignanini123@cluster0.2umrg.mongodb.net/ecommerce?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
+            await mongoose.connect('mongodb+srv://Gonzalo:gonza123456@cluster0.ldyb1.mongodb.net/ecommerce?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
         }
         } catch (err) {
             console.error(err)
@@ -72,11 +72,11 @@ app.use(cors())
 app.use(express.static(__dirname + '/public'))
 
 app.use(session({
-    store: MongoStore.create({ mongoUrl:'mongodb+srv://Gonzaa:gonzasignanini123@cluster0.2umrg.mongodb.net/ecommerce?retryWrites=true&w=majority'}),
-    secret:"Proyecto-Backend",
+    store: MongoStore.create({ mongoUrl:'mongodb+srv://Gonzalo:gonza123456@cluster0.ldyb1.mongodb.net/ecommerce?retryWrites=true&w=majority'}),
+    secret:"CoderBackend",
     resave: false,
     saveUninitialized: false,
-    //cookie: { maxAge: expires * 1000 }
+    cookie: { maxAge: 10000 }
 }))
 
 app.use(express.static('public'))
@@ -92,7 +92,7 @@ app.get('/auth/facebook',passport.authenticate('facebook',{scope:['email']}),(re
 app.get('/auth/facebook/callback',passport.authenticate('facebook',{
     failureRedirect:'/paginadeFail'
 }),(req,res)=>{
-    res.send({message:"FINALMENTE, logueado :)"})
+    res.send({message:"Login con Facebook Exitoso."})
 })
 
 app.get('/paginadeFail', (req, res) => {
@@ -100,5 +100,5 @@ app.get('/paginadeFail', (req, res) => {
   })
   
   app.get('/logout', (req, res) => {
-    req.logout()
+    req.logout();
   })
