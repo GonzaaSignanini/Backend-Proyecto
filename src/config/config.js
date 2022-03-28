@@ -3,7 +3,7 @@ dotenv.config()
 
 module.exports = {
     fileSystem:{
-        baseUrl: './public/txt/'
+        baseUrl: './src/public/txt/'
     },
     mongo:{
         baseUrl:`mongodb+srv://Gonzalo:gonza123456@cluster0.ldyb1.mongodb.net/ecommerce?retryWrites=true&w=majority`
