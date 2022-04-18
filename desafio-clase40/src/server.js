@@ -4,7 +4,7 @@ import MongoClient from "./daos/MongoClient.js";
 
 const app = express()
 const PORT = 8080
-const server = app.listen(PORT,()=>console.log("Listen on PORT: " + server.address().port))
+const server = app.listen(PORT,()=>console.log("Listen on PORT: " + server.address().port+"."))
 
 let client = new MongoClient()
 client.connect()
