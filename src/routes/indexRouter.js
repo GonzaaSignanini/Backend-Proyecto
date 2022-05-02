@@ -31,7 +31,13 @@ router.post('/home', async (req, res) => {
 
 router.get('/home', async (req, res) => {
     if(session){
-        session.role == 'admin' ? res.render('pages/indexAdmin') : res.render('pages/indexUser')
+        session.role == 'admin' ? res.render('pages/indexAdmin', 
+        {productos: await products.getAll()
+            .then(result => {return result.payload})
+            .catch(err => console.log(err))}) : 
+        res.render('pages/indexUser', {productos: await products.getAll()
+                .then(result => {return result.payload})
+                .catch(err => console.log(err))})
     }else{
         res.redirect('/')
     }
