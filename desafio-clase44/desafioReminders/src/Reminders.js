@@ -7,25 +7,31 @@ class Reminder{
     }
     createReminder = (data)=> {
         if(this.reminders.length === 0){
-            data.id=1
-        }else{
-            data.id=this.reminders[this.reminders.lenght-1].id+1
+            data.id= 1
+        } else {
+            const { id } = this.reminders[this.reminders.length - 1]
+            data.id = id + 1
         }
-        data.status="sin leer"
+        data.status="Sin leer"
         this.reminders.push(data)
         return data
     }
-    completeReminder = (data)=>{
-        let index = this.reminders.findIndex(rem=>requestAnimationFrame.id===data.id)
-        if(index!==-1){
-            this.reminders[index].status="Leido"
-            return this.reminders[index]
-        }else{
-            throw new Error('no reminder found')
-        }
+    completeReminder = ({id})=>{
+        const data = this.reminders.map((reminder) => {
+            if (reminder.id === id) {
+                reminder.status = 'Leido'
+                return reminder
+            }
+        })
+        return data
     }
     deleteReminders = ()=>{
-        this.reminders = this.reminders.filter(rem=>rem.status="Sin leer")
+        const data = this.reminders.filter((reminder) => {
+            if (reminder.status == "Sin leer") {
+                return reminder
+            }
+        })
+        this.reminders = data
         return this.reminders
     }
 }

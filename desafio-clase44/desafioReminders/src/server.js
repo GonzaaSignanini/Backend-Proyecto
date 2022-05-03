@@ -18,7 +18,7 @@ const schema = buildSchema(`
     type Mutation{
         createReminder(title:String,description:String): Reminder
         deleteReminders:[Reminder]
-        completeReminder(id:Int): Reminder
+        completeReminder(id:Int): [Reminder]
     }
 `)
 
@@ -28,7 +28,7 @@ app.use('/graphql',graphqlHTTP({
         getReminders:()=> reminder.getRemainder(),
         createReminder:(data)=>reminder.createReminder(data),
         deleteReminders:()=>reminder.deleteReminders(),
-        completeReminder:()=>reminder.completeReminderid(id)
+        completeReminder:(id)=>reminder.completeReminder(id)
     },
     graphiql:true
 }))
