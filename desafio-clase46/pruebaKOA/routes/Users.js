@@ -21,7 +21,6 @@ router.get('/',context=>{
 
 router.get('/:id', context=> {
     const currentUser = users.find(user => user.id === parseInt(context.params.id))
-    console.log(currentUser);
     if(currentUser) {
         context.body={
             currentUser
